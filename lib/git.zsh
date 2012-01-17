@@ -190,3 +190,22 @@ function git_compare_version() {
 POST_1_7_2_GIT=$(git_compare_version "1.7.2")
 # Clean up the namespace slightly by removing the checker function
 unfunction git_compare_version
+
+# Checks if there is a bisect, merge or rebase currently going on
+git_prompt_rebase_state() {
+  STATUS=""
+
+  if [ -f ".git/BISECT_LOG" ] ; then
+    STATUS="$ZSH_THEME_GIT_PROMPT_STATE_BEFORE$ZSH_THEME_GIT_PROMPT_STATE_BISECT"
+  elif [ -f ".git/MERGE_HEAD" ] ; then
+    STATUS="$ZSH_THEME_GIT_PROMPT_STATE_BEFORE$ZSH_THEME_GIT_PROMPT_STATE_MERGE"
+  else
+    for dir in rebase rebase-apply rebase-merge ; do
+      if [ -d ".git/$dir" ] ; then
+        STATUS="$ZSH_THEME_GIT_PROMPT_STATE_BEFORE$ZSH_THEME_GIT_PROMPT_STATE_REBASE"
+        break
+      fi
+    done
+  fi
+  echo $STATUS
+}
