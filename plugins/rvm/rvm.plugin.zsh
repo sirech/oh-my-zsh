@@ -1,8 +1,10 @@
+fpath=($rvm_path/scripts/zsh/Completion $fpath)
+
 alias rubies='rvm list rubies'
 alias gemsets='rvm gemset list'
 
 local ruby18='ruby-1.8.7-p334'
-local ruby19='ruby-1.9.2-p180'
+local ruby19='ruby-1.9.3-p194'
 
 function rb18 {
 	if [ -z "$1" ]; then
@@ -51,3 +53,9 @@ function cdgem {
   local gemdir=`rvm gemdir`
   cd ${gemdir}/gems; cd $(find . -maxdepth 1 -name "*${target}*" | sort | tail -1)
 }
+
+function _rvm_completion {
+  source $rvm_path"/scripts/zsh/Completion/_rvm"
+}
+compdef _rvm_completion rvm
+
