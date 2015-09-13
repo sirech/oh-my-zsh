@@ -68,7 +68,17 @@ function gems {
 		-Ee "s/$current_ruby$current_gemset$/$fg[green]&$reset_color/g"
 }
 
+# Go to the directory where the given gem is defined.
+#
+# Credit to: https://github.com/henrik/dotfiles/blob/master/bash/functions.sh
+function cdgem {
+  local target=${1?No name for a gem given}
+  local gemdir=`rvm gemdir`
+  cd ${gemdir}/gems; cd $(find . -maxdepth 1 -name "*${target}*" | sort | tail -1)
+}
+
 function _rvm_completion {
   source $rvm_path"/scripts/zsh/Completion/_rvm"
 }
 compdef _rvm_completion rvm
+
